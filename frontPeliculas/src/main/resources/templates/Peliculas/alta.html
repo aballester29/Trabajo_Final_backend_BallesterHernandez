@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:insert="base :: cabecera">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PELICULAS</title>
+</head>
+<body>
+
+<div th:insert="base :: navbar"></div>
+<div class="container">
+  <h2 th:text="${titulo}"
+      class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h2>
+  <form th:action="@{/ppeliculas/guardar}" method="post" th:object="${pelicula}">
+    <div th:if="${#fields.hasErrors('*')}" class='alert alert-danger' role='alert'>
+      Por favor corrija los siguientes errores:
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+      </ul>
+    </div>
+
+    <div class="mb-3">
+      <label for="portada" class="col-sm-2 col-form-label">Imagen</label>
+      <div class="col-sm-6">
+        <input type="text" id="portada"  th:field="*{portada}" name="portada" class="form-control"/>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="titulo" class="form-label">Titulo</label>
+      <input type="text" class="form-control" th:field="*{titulo}" id="titulo" name="titulo"
+             placeholder="Escriba el titulo de la peliula" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="duracion" class="form-label">Duración</label>
+      <input type="number" class="form-control" th:field="*{duracion}" id="duracion" name="duracion"
+             placeholder="Escriba la duración de la pelicula en minutos" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="sinopsis" class="form-label">Sinopsis</label>
+      <input type="text" class="form-control" th:field="*{sinopsis}" id="sinopsis" name="sinopsis"
+             placeholder="Escriba la sinopsis de la pelicula" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="pais" class="form-label">Pais</label>
+      <input type="text" class="form-control" th:field="*{pais}" id="pais" name="pais"
+             placeholder="Escriba el pais de origen de la pelicula" required="required">
+    </div>
+    <div class="mb-3">
+        <label for="direccion" class="form-label">Direccion</label>
+      <input type="text" class="form-control" th:field="*{direccion}" id="direccion" name="direccion"
+             placeholder="Escriba el nombre del director o directora de la pelicula" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="anio" class="form-label">Año</label>
+      <input type="number" class="form-control" th:field="*{anio}" id="anio" name="anio"
+             placeholder="Escriba el año de la pelicula" required="required">
+    </div>
+
+    <div class="mb-3">
+      <h2>Genero</h2>
+      <select class="form-select" th:field="*{genero}" name="genero" id="genero">
+        <!--                 <option th:value="" selected>Seleccionar categoría</option> -->
+        <option th:value="Comedia">Comedia</option>
+        <option th:value="Drama">Drama</option>
+        <option th:value="Accion">Acción</option>
+        <option th:value="Terror">Terror</option>
+        <option th:value="Romantica">Romántica</option>
+        <option th:value="Ciencia">Ciencia Ficción</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <h2> Actores </h2>
+      <input id="nombresActores" />
+      <select name="actoresIds" id="actoresIds" multiple>
+        <option th:each="actor : ${actores}" th:value="${actor.id}"
+                th:text="${actor.nombre}"></option>
+      </select>
+
+    </div>
+    <button type="submit" class="btn btn-dark">Guardar</button>
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{portada}"/>
+    <input type="hidden" id="actoresId" th:field="*{actoresId}"/>
+  </form>
+  <hr>
+  <a class="btn btn-primary" role="button" th:href="@{/ppeliculas/listar}">Ir a Inicio</a>
+</div>
+
+<script>
+  const options = document.getElementById('actoresIds')
+  var selected = [];
+  var selectedNames = [];
+  options.addEventListener('change', event => {
+    for (var option of options.options)
+    {
+      if (option.selected) {
+        selected.push(option.value);
+        selectedNames.push(option.text);
+        options.remove(option);
+      }
+    }
+    var ids = document.getElementById('actoresId');
+    ids.setAttribute("value", selected);
+    var ids = document.getElementById('nombresActores');
+    ids.setAttribute("value", selectedNames);
+  });
+</script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+
+
+</body>
+</html>

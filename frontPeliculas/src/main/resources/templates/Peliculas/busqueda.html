@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="base :: cabecera">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PELICULAS</title>
+</head>
+
+<body>
+<div th:insert="base :: navbar"></div>
+<div class="container">
+  <h2 class="text-secondary border border-success border-top-0 border-left-0 border-right-0">Búsqueda de peliculas</h2>
+  <form th:action="@{/ppeliculas/titulo}" method="get">
+    <div class="mb-3">
+      <label for="titulo" class="form-label">Titulo</label>
+      <input type="text" class="form-control" id="titulo" name="titulo"
+             placeholder="Escriba el titulo de la pelicula">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar por titulo</button>
+  </form>
+  <hr>
+  <form th:action="@{/ppeliculas/genero}" method="get">
+    <div class="mb-3">
+      <select class="form-select" name="genero" id="genero">
+        <!--                 <option selected>Seleccionar categoría</option> -->
+        <option th:value="Comedia">Comedia</option>
+        <option th:value="Drama">Drama</option>
+        <option th:value="Accion">Acción</option>
+        <option th:value="Terror">Terror</option>
+        <option th:value="Romantica">Romántica</option>
+        <option th:value="Ciencia">Ciencia Ficción</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar por genero</button>
+  </form>
+  <hr>
+  <form th:action="@{/ppeliculas/actores}" method="get">
+    <div class="mb-3">
+      <label for="actor" class="form-label">Nombre del actor</label>
+      <input type="text" class="form-control" id="actor" name="actor"
+             placeholder="Escriba el nombre del actor de la pelicula">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar por actor</button>
+  </form>
+  <hr>
+  <a class="btn btn-primary" role="button" th:href="@{/ppeliculas/listar}">Ir a Inicio</a>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:insert="base :: cabecera">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PELICULAS</title>
+</head>
+<body>
+
+<div th:insert="base :: navbar"></div>
+<div class="container">
+  <h2 th:text="${titulo}"
+      class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h2>
+  <form th:action="@{/actores/guardar/}" method="post" th:object="${actor}" enctype="multipart/form-data">
+    <div th:if="${#fields.hasErrors('*')}" class='alert alert-danger' role='alert'>
+      Por favor corrija los siguientes errores:
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+      </ul>
+    </div>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre"
+             placeholder="Escriba el nombre del actor" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="nacionalidad" class="form-label">Nacionalidad</label>
+      <input type="text" class="form-control" th:field="*{nacionalidad}" id="nacionalidad" name="nacionalidad"
+             placeholder="Escriba la nacionalidad del actor" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="fechaNac" class="form-label">Fecha de nacimiento</label>
+      <input type="date" class="form-control" th:field="*{fechaNac}" id="fechaNac" name="fechaNac"
+             placeholder="Escriba la fecha de nacimiento" required="required">
+    </div>
+    <button type="submit" class="btn btn-dark">Guardar</button>
+    <input type="hidden" th:field="*{id}" />
+  </form>
+  <hr>
+  <a class="btn btn-primary" role="button" th:href="@{/ppeliculas/listar}">Ir a Inicio</a>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

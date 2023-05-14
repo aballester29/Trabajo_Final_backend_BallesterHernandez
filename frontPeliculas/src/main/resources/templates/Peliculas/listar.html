@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="base :: cabecera">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PELICULAS</title>
+</head>
+
+<body>
+<div th:insert="base :: navbar"></div>
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 th:text="${titulo}"></h1>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-primary w-50 m-auto" th:href="@{alta}" role="button">Añadir pelicula</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem;" th:each="pelicula : ${peliculas}">
+            <img th:if="${#strings.length(pelicula.portada) > 0}" class="img-thumbnail rounded card-img-top"
+                 style="max-width: 25%;" th:src="@{'http://localhost:8001/uploads/' + ${pelicula.portada}}"
+                 th:alt="${pelicula.portada}" />
+<!--            <img th:src="'http://localhost:8080/peliculas/uploads/'+${pelicula.portada}" class="card-img-top">-->
+            <div class="card-body">
+                <h5 class="card-title" th:text="${pelicula.titulo}"></h5>
+                <p class="card-text" th:text="${pelicula.sinopsis}"></p>
+                <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                   th:value="${pelicula.titulo} + ';' + ${pelicula.anio}  + ';' + ${pelicula.direccion} + ';' + ${pelicula.duracion} + ';' + ${pelicula.portada} + ';'  + ${pelicula.pais} + ';' + ${pelicula.sinopsis} + ';' + ${pelicula.genero} +';' + ${pelicula.id} +';' + ${pelicula.actores}">Detalle</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Detalles de la pelicula</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card" style="width: auto;">
+                            <img class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                </div>
+                            <ul class="list-group list-group-flush">
+                                <li id="duracion" class="list-group-item">An item</li>
+                                <li id="genero" class="list-group-item">A second item</li>
+                                <li id="pais" class="list-group-item">A third item</li>
+                            </ul>
+                            <div class="card-body">
+                                <p class="card-text">Some quick example text to build on the card title and make up
+                                    the bulk of the card's content.</p>
+                            </div>
+                            <div class="card-body">
+                                <a id="actores" class="btn btn-primary">Mostrar actores</a>
+                            </div>
+                            <div class="card-body">
+                                <a id="criticas" class="btn btn-primary">Mostrar criticas</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a id="modificar" class="btn btn-primary">Modificar pelicula</a>
+                        <a id="eliminar" class="btn danger">Eliminar pelicula</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:replace="base :: script"></script>
+<script>
+    const exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const recipient = button.getAttribute('value')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        const modalCardImage = exampleModal.querySelector('.card-img-top')
+        const myArray = recipient.split(";");
+        const modalCardTitle = exampleModal.querySelector('.card-title')
+        const modalCardSubTitle = exampleModal.querySelector('.card-subtitle')
+        const modalCardDuracion = exampleModal.querySelector('#duracion')
+        const modalCardPais = exampleModal.querySelector('#pais')
+        const modalCardGenero= exampleModal.querySelector('#genero')
+        const modalCardText = exampleModal.querySelector('.card-text')
+        const modalCardActores = exampleModal.querySelector('#actores')
+        const modalCardCriticas = exampleModal.querySelector('#criticas')
+        const modalCardbuttonMod = exampleModal.querySelector('#modificar')
+        const modalCardbuttonBorrar = exampleModal.querySelector('#eliminar')
+
+
+        const urlMod = "/ppeliculas/editar/" + myArray[8]
+        const urlBorrado = "/ppeliculas/borrar?id=" + myArray[8]
+        const urlActores = "/ppeliculas/actores/" + myArray[8]
+        const urlCriticas = "/ppeliculas/criticas/" + myArray[8]
+        // modalTitle.textContent = `New message to ${recipient}`
+        modalCardTitle.textContent =`${myArray[0]} - ${myArray[1]}`
+        modalCardSubTitle.textContent = `Dirección: ${myArray[2]}`
+        modalCardDuracion.textContent = `Duración: ${myArray[3]}`
+        modalCardImage.setAttribute("src", "http://localhost:8001/uploads/" + myArray[4])
+        modalCardPais.textContent = `Pais: ${myArray[5]}`
+        modalCardText.textContent = `Sinopsis: ${myArray[6]}`
+        modalCardGenero.textContent = `Genero: ${myArray[7]}`
+
+        modalCardbuttonMod.setAttribute("href", urlMod)
+        modalCardbuttonBorrar.setAttribute("href", urlBorrado)
+        modalCardActores.setAttribute("href", urlActores)
+        modalCardCriticas.setAttribute("href", urlCriticas)
+
+
+
+    })
+</script>
+</body>
+
+</html>

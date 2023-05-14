@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:insert="base :: cabecera">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REGISTRO DE USUARIOS</title>
+</head>
+<body>
+<div th:insert="base :: navbar"></div>
+<div class="container px-5 py-5">
+  <h1 class="text-center">Registro nuevo usuario</h1>
+  <h2 th:text="${titulo}"
+      class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h2>
+  <form th:action="@{/cusuarios/registrar}" method="post" th:object="${usuario}">
+    <div th:if="${#fields.hasErrors('*')}" class='alert alert-danger' role='alert'>
+      Por favor corrija los siguientes errores:
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+      </ul>
+    </div>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre"
+             placeholder="Escriba el nombre del usuario" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="clave" class="form-label">Clave</label>
+      <input type="text" class="form-control" th:field="*{clave}" id="clave" name="clave"
+             placeholder="Escriba la clave del usuario" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo</label>
+      <input type="text" class="form-control" th:field="*{correo}" id="correo" name="correo"
+             placeholder="Escriba el correo del usuario" required="required">
+    </div>
+    <button type="submit" class="btn btn-dark">Registrarse</button>
+  </form>
+
+  <hr>
+  <a class="btn btn-primary" role="button" th:href="@{/login/}">Ir a Login</a>
+
+</div>
+</div>
+
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
